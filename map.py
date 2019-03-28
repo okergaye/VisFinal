@@ -44,8 +44,14 @@ for country in countries:
     print(country)
 
 user_input = input("Type in a year")
+year = 0
 if user_input == "exit":
     exit(0)
 else:
     try:
+        year = int(user_input)
+    except:
+        print("Not a valid year")
+        exit(0)
+print(year)
 
