@@ -2,6 +2,7 @@
 import pandas as pd
 import folium
 import os
+import numpy as np
 
 # Load the shape of the zone (US states)
 # Find the original file here: https://github.com/python-visualization/folium/tree/master/examples/data
@@ -32,3 +33,19 @@ folium.LayerControl().add_to(m)
 
 # Save to html
 m.save('test.html')
+
+
+# Lets load the csv files:
+diseaseTypes = ['a3', 'a3', 'a25', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4']
+diseaseData = np.genfromtxt('./measles_disease_data.csv', dtype=diseaseTypes, delimiter=',', names=True)
+countries = diseaseData['Country']
+
+for country in countries:
+    print(country)
+
+user_input = input("Type in a year")
+if user_input == "exit":
+    exit(0)
+else:
+    try:
+
