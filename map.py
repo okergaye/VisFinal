@@ -1,6 +1,7 @@
 # Import libraries
 import pandas as pd
 import folium
+import folium.plugins
 import os
 import numpy as np
 
@@ -16,33 +17,18 @@ state_unemployment = os.path.join(
 state_data = pd.read_csv(state_unemployment)
 
 # Initialize the map:
-m = folium.Map(location=[37, -102], zoom_start=5)
-
-# Add the color for the chloropleth:
-m.choropleth(
-    geo_data=world_geo,
-    name='choropleth',
-    data=state_data,
-    columns=['Country', 'January'],
-    key_on='feature.id',
-    fill_color='YlGn',
-    fill_opacity=0.7,
-    line_opacity=0.2,
-    legend_name='Unemployment Rate (%)'
-)
-folium.LayerControl().add_to(m)
-
-# Save to html
-m.save('testt.html')
-m.save('test.html')
+m = folium.plugins.DualMap(location=[37, -102], zoom_start=5)
 
 
-# Lets load the csv files:
-diseaseTypes = ['a3', 'a3', 'a25', 'i4', 'i4', 'i4', 'i4',
-                'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4']
-diseaseData = np.genfromtxt(
-    './measles_disease_data.csv', dtype=diseaseTypes, delimiter=',', names=True)
-countries = diseaseData['Country']
+
+
+
+# # Lets load the csv files:
+# diseaseTypes = ['a3', 'a3', 'a25', 'i4', 'i4', 'i4', 'i4',
+#                 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4', 'i4']
+# diseaseData = np.genfromtxt(
+#     './measles_disease_data.csv', dtype=diseaseTypes, delimiter=',', names=True)
+# countries = diseaseData['Country']
 
 # for country in countries:
 #     print(country)
@@ -71,11 +57,11 @@ measles_disease_datam = pd.read_csv(measles_disease_path)
 disease_map = folium.Map(location=[37, -102], zoom_start=5)
 
 # Add the color for the chloropleth:
-disease_map.choropleth(
+m.m2.choropleth(
     geo_data=worldmap,
     name='choropleth',
     data=measles_disease_datam,
-    columns=['ISO3', 'Total'],
+    columns=['ISO3', '2012'],
     key_on='feature.id',
     fill_color='YlGn',
     fill_opacity=0.7,
@@ -83,24 +69,32 @@ disease_map.choropleth(
     legend_name='Measle Occurence \# of people',
     bins = [0, 10, 50, 100, 150, 200, 300, 3000, 50000]
 )
-folium.LayerControl().add_to(disease_map)
+folium.LayerControl().add_to(m.m2)
+
+# folium.LayerControl().add_to(disease_map)
+
 
 measles_vaccine_path = os.path.join('./', 'measles_vaccine_data.csv')
 measles_vaccine_datam = pd.read_csv(measles_vaccine_path, encoding='iso-8859-1')
 
-disease_map.choropleth(
+m.m1.choropleth(
     geo_data=worldmap,
     name='choropleth',
     data=measles_vaccine_datam,
-    columns=['Country Code', '1980'],
+    columns=['Country Code', '2012'],
     key_on='feature.id',
     fill_color='YlGn',
     fill_opacity=0.7,
     line_opacity=0.2,
-    legend_name='Measle Occurence \# of people',
-    bins=[0, 10, 50, 100, 150, 200, 300, 3000, 50000]
+    legend_name='Percent of Country Vaccinated',
+    # bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 101]
+    bins=[0, 30, 45, 60, 85, 100]
 )
-folium.LayerControl().add_to(disease_map)
+folium.LayerControl().add_to(m.m1)
+
+# folium.LayerControl().add_to(disease_map)
 
 # Save to html
 disease_map.save('disease_map.html')
+# Save to html
+m.save('test.html')
