@@ -33,17 +33,17 @@ m = folium.plugins.DualMap(location=[37, -102], zoom_start=5)
 # for country in countries:
 #     print(country)
 
-user_input = input("Type in a year")
-year = 0
-if user_input == "exit":
-    exit(0)
-else:
-    try:
-        year = int(user_input)
-    except:
-        print("Not a valid year")
-        exit(0)
-print(year)
+# user_input = input("Type in a year")
+# year = 0
+# if user_input == "exit":
+#     exit(0)
+# else:
+#     try:
+#         year = int(user_input)
+#     except:
+#         print("Not a valid year")
+#         exit(0)
+# print(year)
 
 worldmap = os.path.join('./', 'world.json')
 
@@ -56,6 +56,9 @@ measles_disease_datam = pd.read_csv(measles_disease_path)
 # Initialize the map:
 disease_map = folium.Map(location=[37, -102], zoom_start=5)
 
+measles_disease_bins = list(measles_disease_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
+
+
 # Add the color for the chloropleth:
 m.m2.choropleth(
     geo_data=worldmap,
@@ -67,7 +70,7 @@ m.m2.choropleth(
     fill_opacity=0.7,
     line_opacity=0.2,
     legend_name='Measle Occurence \# of people',
-    bins = [0, 10, 50, 100, 150, 200, 300, 3000, 50000]
+    bins=measles_disease_bins
 )
 folium.LayerControl().add_to(m.m2)
 
@@ -76,6 +79,9 @@ folium.LayerControl().add_to(m.m2)
 
 measles_vaccine_path = os.path.join('./', 'measles_vaccine_data.csv')
 measles_vaccine_datam = pd.read_csv(measles_vaccine_path, encoding='iso-8859-1')
+
+
+measles_vaccine_bins = list(measles_vaccine_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
 
 m.m1.choropleth(
     geo_data=worldmap,
@@ -88,7 +94,7 @@ m.m1.choropleth(
     line_opacity=0.2,
     legend_name='Percent of Country Vaccinated',
     # bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 101]
-    bins=[0, 30, 45, 60, 85, 100]
+    bins=measles_vaccine_bins
 )
 folium.LayerControl().add_to(m.m1)
 
