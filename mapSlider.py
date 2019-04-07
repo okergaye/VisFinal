@@ -12,7 +12,7 @@ import numpy as np
 
 
 # Initialize the map:
-m = folium.plugins.DualMap(location=[37, -102], zoom_start=5)
+m = folium.Map(location=[37, -102], zoom_start=5)
 
 worldmap = os.path.join('./', 'world.json')
 
@@ -33,12 +33,14 @@ print(j["features"][1]['id'])
 styledata = {}
 
 year = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
+xx = measles_disease_datam.loc[measles_disease_datam['ISO3'] == "AGO"]
+print(xx)
 
 for x in range(0, len(j["features"])):
     code = j["features"][x]['id']
-    print(code)
+    # print(code)
     df = pd.DataFrame(
-        {'color': np.random.normal(size=n_periods),
+        {'color': xx,
          'opacity': np.random.normal(size=n_periods)},
         index=year
     )
