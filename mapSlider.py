@@ -29,18 +29,25 @@ measles_disease_bins = list(
 
 n_periods = 9
 j = json.load(open('world.json', 'r'))
-print(j["features"][1]['id'])
+# print(j["features"][1]['id'])
 styledata = {}
 
 year = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
-xx = measles_disease_datam.loc[measles_disease_datam['ISO3'] == "AGO"]
-print(xx)
+
+# xx = measles_disease_datam.loc[measles_disease_datam['ISO3'] == code]
+# xx = xx.drop(columns=['Country', 'ISO3'])
+# xx = xx.values
+# print(xx[0])
 
 for x in range(0, len(j["features"])):
     code = j["features"][x]['id']
-    # print(code)
+    xx = measles_disease_datam.loc[measles_disease_datam['ISO3'] == code]
+    xx = xx.drop(columns=['Country', 'ISO3'])
+    xx = xx.values
+    # print(xx[0])
+    print(code)
     df = pd.DataFrame(
-        {'color': xx,
+        {'color': xx[0],
          'opacity': np.random.normal(size=n_periods)},
         index=year
     )
