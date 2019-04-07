@@ -47,7 +47,7 @@ for x in range(0, len(j["features"])):
     df.sort_index()
     styledata[code] = df
 
-print(styledata.items())
+# print(styledata.items())
 max_color, min_color, max_opacity, min_opacity = 0, 0, 0, 0
 
 for code, data in styledata.items():
@@ -64,7 +64,7 @@ def norm(x):
     return (x - x.min()) / (x.max() - x.min())
 
 
-for country, data in styledata.items():
+for code, data in styledata.items():
     data['color'] = data['color'].apply(cmap)
     data['opacity'] = norm(data['opacity'])
 
@@ -83,38 +83,8 @@ TimeSliderChoropleth(
     # columns=['ISO3', '2012'],
     # key_on='feature.id',
 
-).add_to(m.m2)
-folium.LayerControl().add_to(m.m2)
+).add_to(m)
+folium.LayerControl().add_to(m)
 
-# folium.LayerControl().add_to(disease_map)
-
-
-measles_vaccine_path = os.path.join('./', 'measles_vaccine_data.csv')
-measles_vaccine_datam = pd.read_csv(
-    measles_vaccine_path, encoding='iso-8859-1')
-
-
-measles_vaccine_bins = list(
-    measles_vaccine_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
-
-Choropleth(
-    geo_data=worldmap,
-    name='choropleth',
-    data=measles_vaccine_datam,
-    columns=['Country Code', '2012'],
-    key_on='feature.id',
-    fill_color='YlGn',
-    fill_opacity=0.7,
-    line_opacity=0.2,
-    legend_name='Percent of Country Vaccinated',
-    # bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 101]
-    bins=measles_vaccine_bins
-).add_to(m.m1)
-folium.LayerControl().add_to(m.m1)
-
-# folium.LayerControl().add_to(disease_map)
-
-# Save to html
-disease_map.save('disease_map.html')
 # Save to html
 m.save('slider.html')
