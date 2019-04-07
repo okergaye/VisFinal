@@ -44,8 +44,8 @@ diseaseData = np.genfromtxt(
     './measles_disease_data.csv', dtype=diseaseTypes, delimiter=',', names=True)
 countries = diseaseData['Country']
 
-for country in countries:
-    print(country)
+# for country in countries:
+#     print(country)
 
 user_input = input("Type in a year")
 year = 0
@@ -82,6 +82,23 @@ disease_map.choropleth(
     line_opacity=0.2,
     legend_name='Measle Occurence \# of people',
     bins = [0, 10, 50, 100, 150, 200, 300, 3000, 50000]
+)
+folium.LayerControl().add_to(disease_map)
+
+measles_vaccine_path = os.path.join('./', 'measles_vaccine_data.csv')
+measles_vaccine_datam = pd.read_csv(measles_vaccine_path, encoding='iso-8859-1')
+
+disease_map.choropleth(
+    geo_data=worldmap,
+    name='choropleth',
+    data=measles_vaccine_datam,
+    columns=['Country Code', '1980'],
+    key_on='feature.id',
+    fill_color='YlGn',
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name='Measle Occurence \# of people',
+    bins=[0, 10, 50, 100, 150, 200, 300, 3000, 50000]
 )
 folium.LayerControl().add_to(disease_map)
 
