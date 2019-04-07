@@ -2,6 +2,9 @@
 import pandas as pd
 import folium
 import folium.plugins
+from folium.plugins import TimeSliderChoropleth
+from folium.features import Choropleth
+
 import os
 import numpy as np
 
@@ -18,9 +21,6 @@ state_data = pd.read_csv(state_unemployment)
 
 # Initialize the map:
 m = folium.plugins.DualMap(location=[37, -102], zoom_start=5)
-
-
-
 
 
 # # Lets load the csv files:
@@ -56,11 +56,12 @@ measles_disease_datam = pd.read_csv(measles_disease_path)
 # Initialize the map:
 disease_map = folium.Map(location=[37, -102], zoom_start=5)
 
-measles_disease_bins = list(measles_disease_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
+measles_disease_bins = list(
+    measles_disease_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
 
 
 # Add the color for the chloropleth:
-m.m2.choropleth(
+Choropleth(
     geo_data=worldmap,
     name='choropleth',
     data=measles_disease_datam,
@@ -71,19 +72,21 @@ m.m2.choropleth(
     line_opacity=0.2,
     legend_name='Measle Occurence \# of people',
     bins=measles_disease_bins
-)
+).add_to(m.m2)
 folium.LayerControl().add_to(m.m2)
 
 # folium.LayerControl().add_to(disease_map)
 
 
 measles_vaccine_path = os.path.join('./', 'measles_vaccine_data.csv')
-measles_vaccine_datam = pd.read_csv(measles_vaccine_path, encoding='iso-8859-1')
+measles_vaccine_datam = pd.read_csv(
+    measles_vaccine_path, encoding='iso-8859-1')
 
 
-measles_vaccine_bins = list(measles_vaccine_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
+measles_vaccine_bins = list(
+    measles_vaccine_datam['2012'].quantile([0, 0.25, 0.5, 0.75, 1]))
 
-m.m1.choropleth(
+Choropleth(
     geo_data=worldmap,
     name='choropleth',
     data=measles_vaccine_datam,
@@ -95,7 +98,7 @@ m.m1.choropleth(
     legend_name='Percent of Country Vaccinated',
     # bins=[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 101]
     bins=measles_vaccine_bins
-)
+).add_to(m.m1)
 folium.LayerControl().add_to(m.m1)
 
 # folium.LayerControl().add_to(disease_map)
